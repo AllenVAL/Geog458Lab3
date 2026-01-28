@@ -14,7 +14,7 @@ const legend = document.getElementById('legend');
 
 map.on('load', () => {
 
-    //MAP 1: Choropleth (rates)
+    //map1: choropleth (rates)
   if (page.includes('map1.html')) {
 
     map.addSource('covid-rates', {
@@ -51,6 +51,7 @@ map.on('load', () => {
       }
     });
 
+    //interactivity: click for popup
     map.on('click', 'rates-fill', (e) => {
     const p = e.features[0].properties;
     new mapboxgl.Popup()
@@ -60,7 +61,7 @@ map.on('load', () => {
     });
 
 
-    // legend labels
+    // legend
     let labels = ['<strong>Rate (per 1,000)</strong>'];
     for (let i = 0; i < breaks.length; i++) {
       const from = breaks[i];
@@ -78,7 +79,7 @@ map.on('load', () => {
   }
 
 
-    //MAP 2: Proportional symbols (cases)
+    //map2: proportional symbols (cases)
 
   if (page.includes('map2.html')) {
 
@@ -127,7 +128,7 @@ map.on('load', () => {
         .addTo(map);
     });
 
-    // legend labels
+    // legend
     let labels = ['<strong>Cases</strong>'];
     for (let i = 0; i < grades.length; i++) {
       const vbreak = grades[i];
