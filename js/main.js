@@ -127,7 +127,7 @@ map.on('load', () => {
         .addTo(map);
     });
 
-    // legend 
+    // legend labels
     let labels = ['<strong>Cases</strong>'];
     for (let i = 0; i < grades.length; i++) {
       const vbreak = grades[i];
