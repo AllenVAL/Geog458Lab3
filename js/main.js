@@ -5,8 +5,8 @@ const page = window.location.href;
 let map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/dark-v10',
-  center: [-96, 37.5],
-  zoom: 3,
+    center: [-98, 39],
+    zoom: 3.6,
   projection: 'albers'
 });
 
