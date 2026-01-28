@@ -11,7 +11,6 @@ body {
   width: 100%;
 }
 
-/* legend panel */
 #legend {
   position: absolute;
   bottom: 0;
@@ -33,7 +32,6 @@ body {
   padding: 0px;
 }
 
-/* for proportional symbol legend dot */
 .dot {
   display: inline-block;
   margin-top: 5px;
@@ -42,14 +40,14 @@ body {
   vertical-align: middle;
 }
 
-/* label next to dot */
+
 .dot-label {
   margin-left: 8px;
   font-style: italic;
   vertical-align: middle;
 }
 
-/* for choropleth legend swatch */
+
 .swatch {
   display: inline-block;
   width: 16px;
@@ -63,7 +61,7 @@ a {
   color: black;
 }
 
-/* simple title */
+
 #title {
   position: absolute;
   top: 0;
