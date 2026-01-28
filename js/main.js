@@ -14,9 +14,7 @@ const legend = document.getElementById('legend');
 
 map.on('load', () => {
 
-  /* =========================
-     MAP 1: Choropleth (rates)
-     ========================= */
+    //MAP 1: Choropleth (rates)
   if (page.includes('map1.html')) {
 
     map.addSource('covid-rates', {
@@ -25,7 +23,14 @@ map.on('load', () => {
     });
 
     const breaks = [0, 10, 20, 40, 80];
-    const colors = ['#f2f2f2', '#cccccc', '#969696', '#636363', '#252525'];
+    const colors = [
+    'rgb(254,229,217)',
+    'rgb(252,174,145)',
+    'rgb(251,106,74)',
+    'rgb(222,45,38)',
+    'rgb(165,15,21)'
+    ];
+
 
     map.addLayer({
       id: 'rates-fill',
@@ -55,7 +60,7 @@ map.on('load', () => {
     });
 
 
-    // legend (simple swatches)
+    // legend labels
     let labels = ['<strong>Rate (per 1,000)</strong>'];
     for (let i = 0; i < breaks.length; i++) {
       const from = breaks[i];
@@ -72,9 +77,9 @@ map.on('load', () => {
     legend.innerHTML = labels.join('') + source;
   }
 
-  /* ==================================
-     MAP 2: Proportional symbols (cases)
-     ================================== */
+
+    //MAP 2: Proportional symbols (cases)
+
   if (page.includes('map2.html')) {
 
     const grades = [10000, 50000, 200000];
@@ -122,7 +127,7 @@ map.on('load', () => {
         .addTo(map);
     });
 
-    // legend (teacher style)
+    // legend 
     let labels = ['<strong>Cases</strong>'];
     for (let i = 0; i < grades.length; i++) {
       const vbreak = grades[i];
