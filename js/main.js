@@ -1,6 +1,6 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWxsZW55dWFuIiwiYSI6ImNtaGU0eGxpNzBhZmQyanEyY3pxZDFoM3oifQ.3KmK2WRpvAGKu9R2l2mHVA';
 
-const page = window.location.pathname;
+const page = window.location.href;
 
 let map = new mapboxgl.Map({
   container: 'map',
@@ -10,15 +10,22 @@ let map = new mapboxgl.Map({
   projection: 'albers'
 });
 
+const legend = document.getElementById('legend');
+
 map.on('load', () => {
 
-     //MAP 1: Choropleth (rates)
+  /* =========================
+     MAP 1: Choropleth (rates)
+     ========================= */
   if (page.includes('map1.html')) {
 
     map.addSource('covid-rates', {
       type: 'geojson',
       data: 'assets/us-covid-2020-rates.json'
     });
+
+    const breaks = [0, 10, 20, 40, 80];
+    const colors = ['#f2f2f2', '#cccccc', '#969696', '#636363', '#252525'];
 
     map.addLayer({
       id: 'rates-fill',
@@ -27,27 +34,47 @@ map.on('load', () => {
       paint: {
         'fill-color': [
           'step',
-          ['to-number', ['get', 'rate']],
-          '#f2f2f2',
-          10, '#cccccc',
-          20, '#969696',
-          40, '#636363',
-          80, '#252525'
+          ['to-number', ['get', 'rates']],
+          colors[0],
+          breaks[1], colors[1],
+          breaks[2], colors[2],
+          breaks[3], colors[3],
+          breaks[4], colors[4]
         ],
-        'fill-opacity': 0.75
+        'fill-opacity': 0.75,
+        'fill-outline-color': 'rgba(255,255,255,0.2)'
       }
     });
 
     map.on('click', 'rates-fill', (e) => {
-      const p = e.features[0].properties;
-      new mapboxgl.Popup()
+    const p = e.features[0].properties;
+    new mapboxgl.Popup()
         .setLngLat(e.lngLat)
-        .setHTML(`<strong>${p.NAME}</strong><br/>Rate: ${p.rate}`)
+        .setHTML(`<strong>${p.county}</strong><br/>Rate: ${p.rates}`)
         .addTo(map);
     });
 
+
+    // legend (simple swatches)
+    let labels = ['<strong>Rate (per 1,000)</strong>'];
+    for (let i = 0; i < breaks.length; i++) {
+      const from = breaks[i];
+      const to = breaks[i + 1];
+      const label = (to === undefined) ? `${from}+` : `${from}–${to}`;
+      labels.push(
+        `<p class="break"><span class="swatch" style="background:${colors[i]};"></span>${label}</p>`
+      );
+    }
+
+    const source =
+      '<p style="text-align: right; font-size:10pt">Source: NYT (cases), ACS 2018 (pop), Census counties</p>';
+
+    legend.innerHTML = labels.join('') + source;
   }
-     //MAP 2: Proportional symbols (cases)
+
+  /* ==================================
+     MAP 2: Proportional symbols (cases)
+     ================================== */
   if (page.includes('map2.html')) {
 
     const grades = [10000, 50000, 200000];
@@ -80,20 +107,38 @@ map.on('load', () => {
             [grades[2], colors[2]]
           ]
         },
-        'circle-opacity': 0.6,
         'circle-stroke-color': 'white',
-        'circle-stroke-width': 1
+        'circle-stroke-width': 1,
+        'circle-opacity': 0.6
       }
     });
 
     map.on('click', 'cases-point', (e) => {
       const p = e.features[0].properties;
+
       new mapboxgl.Popup()
-        .setLngLat(e.features[0].geometry.coordinates)
-        .setHTML(`<strong>${p.NAME}</strong><br/>Cases: ${p.cases}`)
+        .setLngLat(e.lngLat)
+        .setHTML(`<strong>${p.county}</strong><br/>Cases: ${p.cases}`)
         .addTo(map);
     });
 
+    // legend (teacher style)
+    let labels = ['<strong>Cases</strong>'];
+    for (let i = 0; i < grades.length; i++) {
+      const vbreak = grades[i];
+      const dot_radii = 2 * radii[i];
+      labels.push(
+        '<p class="break"><i class="dot" style="background:' + colors[i] +
+        '; width:' + dot_radii + 'px; height:' + dot_radii +
+        'px;"></i> <span class="dot-label" style="top:' + (dot_radii / 2) + 'px;">' +
+        vbreak.toLocaleString() + '</span></p>'
+      );
+    }
+
+    const source =
+      '<p style="text-align: right; font-size:10pt">Source: NYT (cases), Census counties</p>';
+
+    legend.innerHTML = labels.join('') + source;
   }
 
 });

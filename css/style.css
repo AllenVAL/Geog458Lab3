@@ -84,3 +84,13 @@ a {
   color: white;
   opacity: 0.9;
 }
+
+.swatch {
+  display: inline-block;
+  width: 16px;
+  height: 12px;
+  margin-right: 8px;
+  border: 1px solid #333;
+  vertical-align: middle;
+}
+
